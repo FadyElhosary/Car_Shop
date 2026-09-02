@@ -1,0 +1,8 @@
+Total Sales =
+Fact_Order[Quantity] * Fact_Order[Unit_Price]
+
+Net Sales =
+Fact_Order[Total Sales] - Fact_Order[Discount]
+
+Profit =
+Fact_Order[Net Sales] - Fact_Order[Cost]
