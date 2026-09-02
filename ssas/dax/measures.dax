@@ -1,0 +1,40 @@
+Total Sales :=
+SUM(Fact_Order[Gross_Sales])
+
+Net Sales :=
+SUM(Fact_Order[Net_Sales])
+
+Total Cost :=
+SUM(Fact_Order[Cost])
+
+Total Profit :=
+SUM(Fact_Order[Profit])
+
+Profit Margin :=
+DIVIDE([Total Profit], [Net Sales], 0)
+
+Late Shipments Count :=
+CALCULATE(
+    COUNTROWS(Fact_Order),
+    Fact_Order[Is_Late_Shipment] = TRUE()
+)
+
+Average Order Value :=
+DIVIDE(
+    [Net Sales],
+    DISTINCTCOUNT(Fact_Order[Order_ID]),
+    0
+)
+
+Repeat Customer Rate :=
+VAR CustomerOrderCounts =
+    ADDCOLUMNS(
+        VALUES(DIM_Customer[Customer_Key]),
+        "OrderCount", CALCULATE(DISTINCTCOUNT(Fact_Order[Order_ID]))
+    )
+VAR RepeatCustomers =
+    COUNTROWS(FILTER(CustomerOrderCounts, [OrderCount] > 1))
+VAR TotalCustomers =
+    COUNTROWS(CustomerOrderCounts)
+RETURN
+    DIVIDE(RepeatCustomers, TotalCustomers, 0)
